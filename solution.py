@@ -1,25 +1,29 @@
-from sys import argv, exit
-from sonarsweep import part_one, part_two
+def part_one(depths: list) -> int:
+    num_increases = 0
+
+    for i in range(len(depths)):
+        if i == 0:
+            continue  #  Skip the first depth
+        elif depths[i] > depths[i - 1]:
+            num_increases += 1
+
+    return num_increases
 
 
-def parse_puzzle_input(file: str) -> list:
-    """Parse the puzzle input so that each line is an element in a list.
-    Then return the list."""
-    with open(file) as f:
-        return [int(line) for line in f]
+def part_two(depths: list) -> int:
+    num_increases = 0
+    previous_sum = 0
+    current_sum = 0
 
+    # Only iterates the possible number of sliding windows
+    for i in range(len(depths) - 1):
+        if i == 0:  # Skip the first depth
+            continue
 
-if __name__ == "__main__":
-    if len(argv) < 2:
-        print("Usage: solution.py <puzzle input file>")
-        exit(1)
+        previous_sum = current_sum
+        current_sum = depths[i - 1] + depths[i] + depths[i + 1]
 
-    input = parse_puzzle_input(argv[1])
+        if previous_sum != 0 and current_sum > previous_sum:
+            num_increases += 1
 
-    print(
-        f"""
-    Answers:
-    Part one: {part_one(input)}
-    Part two: {part_two(input)}
-    """
-    )
+    return num_increases
